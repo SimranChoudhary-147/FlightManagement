@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { useNavigate } from "react-router-dom";
 
 const AdminRemoveFlight = () => {
@@ -33,33 +33,56 @@ const AdminRemoveFlight = () => {
     navigate("/");
   };
 
-  const deleteIt = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  // const deleteIt = async (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+
+  //   const credential = {
+  //     flightno: data.flightno,
+  //     admin: true,
+  //   };
+
+  //   console.log("==========================")
+  //   console.log(credential);
+  //   console.log("==========================")
+
+  //   axios({
+  //     url: "http://localhost:8000/delete_flight",
+  //     method: "GET",
+  //     withCredentials: true,
+  //     crossDomain: true,
+  //     data:credential,
+  //   }).then((res) => {
+  //     // console.log(res)
+  //   });
+  //   navigate("/");
+  // };
+
+  const [rows, setRows] = React.useState([]); // {id: 1, flightno: "6E-420", flightname:"Indigo", source: "Bengaluru", destination: "Mumbai", price: "10500", seats: 50}
+
+  const removeFlight = async (e) => {
+    console.log("Remove ", e.flightno);
 
     const credential = {
-      flightno: data.flightno,
+      flightno: e.flightno,
       admin: true,
     };
 
-    console.log("==========================")
-    console.log(credential);
-    console.log("==========================")
-
     axios({
       url: "http://localhost:8000/delete_flight",
-      method: "GET",
+      method: "DELETE",
       withCredentials: true,
       crossDomain: true,
-      data:credential,
+      data: credential,
     }).then((res) => {
-      // console.log(res)
+      if (res.data.status === "success") {
+        console.log("remove successful");
+        window.location.reload();
+      } else {
+        console.log("remove not successful");
+      }
     });
-    navigate("/");
   };
-
-  const [rows, setRows] = React.useState([]); //{id: 10, vendorName: "Ramesh Kumar", orgName: "Ventura LLC", phone: "9123871232", tenderValue: "150750" }
-
 
   const columns = [
     {
@@ -85,7 +108,6 @@ const AdminRemoveFlight = () => {
       headerName: "Destination",
       flex: 1,
       maxWidth: 200,
-
     },
     {
       field: "price",
@@ -113,19 +135,20 @@ const AdminRemoveFlight = () => {
         return (
           <Box textAlign="center">
             <Button
-            type="button"
+              type="button"
               // variant="text"
               color="primary"
-              onClick={deleteIt}
-                // console.log("Delete flight")
+              onClick={() => {
+                removeFlight(params.row);
+              }}
+              // console.log("Delete flight")
             >
-              <DownloadRoundedIcon />
+              <CancelRoundedIcon color="error" />
             </Button>
           </Box>
         );
       },
     },
-
   ];
 
   React.useEffect(() => {
@@ -144,21 +167,21 @@ const AdminRemoveFlight = () => {
         //   res.data[i].tenderName === tenderName &&
         //   res.data[i].stud.length !== 0
         // ) {
-          var obj = {
-            id: cnt++,
-            flightno: res.data[i].flightno,
-            flightname: res.data[i].flightname,
-            source: res.data[i].from,
-            destination: res.data[i].to,
-            price: res.data[i].price,
-            seats: res.data[i].seats,
-            date: res.data[i].date,
-          };
-          // if (obj.withdraw === 0) obj.withdraw = "";
-          // if (obj.withdraw === 1) obj.withdraw = "YES.";
-          data.push(obj);
-          setRows(data);
-        }
+        var obj = {
+          id: cnt++,
+          flightno: res.data[i].flightno,
+          flightname: res.data[i].flightname,
+          source: res.data[i].from,
+          destination: res.data[i].to,
+          price: res.data[i].price,
+          seats: res.data[i].seats,
+          date: res.data[i].date,
+        };
+        // if (obj.withdraw === 0) obj.withdraw = "";
+        // if (obj.withdraw === 1) obj.withdraw = "YES.";
+        data.push(obj);
+        setRows(data);
+      }
       // }
       // console.log(rows);
     });

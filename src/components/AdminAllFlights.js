@@ -42,24 +42,23 @@ const AdminAllFlights = () => {
       admin: true,
     };
 
-    console.log("==========================")
+    console.log("==========================");
     console.log(credential);
-    console.log("==========================")
+    console.log("==========================");
 
     axios({
       url: "http://localhost:8000/delete_flight",
       method: "GET",
       withCredentials: true,
       crossDomain: true,
-      data:credential,
+      data: credential,
     }).then((res) => {
       // console.log(res)
     });
     navigate("/");
   };
 
-  const [rows, setRows] = React.useState([]); //{id: 10, vendorName: "Ramesh Kumar", orgName: "Ventura LLC", phone: "9123871232", tenderValue: "150750" }
-
+  const [rows, setRows] = React.useState([]); // {id: 1, flightno: "6E-420", flightname:"Indigo", source: "Bengaluru", destination: "Mumbai", price: "10500", seats: 50}
 
   const columns = [
     {
@@ -85,7 +84,6 @@ const AdminAllFlights = () => {
       headerName: "Destination",
       flex: 1,
       maxWidth: 200,
-
     },
     {
       field: "price",
@@ -105,27 +103,6 @@ const AdminAllFlights = () => {
       flex: 1,
       maxWidth: 200,
     },
-    {
-      field: "Button",
-      flex: 1,
-      maxWidth: 100,
-      renderCell: (params) => {
-        return (
-          <Box textAlign="center">
-            <Button
-            type="button"
-              // variant="text"
-              color="primary"
-              onClick={deleteIt}
-                // console.log("Delete flight")
-            >
-              <DownloadRoundedIcon />
-            </Button>
-          </Box>
-        );
-      },
-    },
-
   ];
 
   React.useEffect(() => {
@@ -144,21 +121,21 @@ const AdminAllFlights = () => {
         //   res.data[i].tenderName === tenderName &&
         //   res.data[i].stud.length !== 0
         // ) {
-          var obj = {
-            id: cnt++,
-            flightno: res.data[i].flightno,
-            flightname: res.data[i].flightname,
-            source: res.data[i].from,
-            destination: res.data[i].to,
-            price: res.data[i].price,
-            seats: res.data[i].seats,
-            date: res.data[i].date,
-          };
-          // if (obj.withdraw === 0) obj.withdraw = "";
-          // if (obj.withdraw === 1) obj.withdraw = "YES.";
-          data.push(obj);
-          setRows(data);
-        }
+        var obj = {
+          id: cnt++,
+          flightno: res.data[i].flightno,
+          flightname: res.data[i].flightname,
+          source: res.data[i].from,
+          destination: res.data[i].to,
+          price: res.data[i].price,
+          seats: res.data[i].seats,
+          date: res.data[i].date,
+        };
+        // if (obj.withdraw === 0) obj.withdraw = "";
+        // if (obj.withdraw === 1) obj.withdraw = "YES.";
+        data.push(obj);
+        setRows(data);
+      }
       // }
       // console.log(rows);
     });

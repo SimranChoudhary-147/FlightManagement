@@ -19,7 +19,6 @@ const UserBookedFlights = () => {
 
   const navigate = useNavigate();
 
-
   const logout = () => {
     axios({
       url: "http://localhost:8000/logout",
@@ -41,24 +40,23 @@ const UserBookedFlights = () => {
       admin: false,
     };
 
-    console.log("==========================")
-    console.log(credential);
-    console.log("==========================")
+    console.log("==========================");
+    // console.log(credential);
+    console.log("==========================");
 
     axios({
       url: "http://localhost:8000/delete_flight",
-      method: "GET",
+      method: "OPTIONS",
       withCredentials: true,
       crossDomain: true,
-      data:credential,
+      data: credential,
     }).then((res) => {
-      // console.log(res)
+       console.log(res)
     });
     navigate("/");
   };
 
-  const [rows, setRows] = React.useState([]); //{id: 10, vendorName: "Ramesh Kumar", orgName: "Ventura LLC", phone: "9123871232", tenderValue: "150750" }
-
+  const [rows, setRows] = React.useState([]); // {id: 1, flightno: "6E-420", flightname:"Indigo", source: "Bengaluru", destination: "Mumbai", price: "10500", seats: 50}
 
   const columns = [
     {
@@ -84,7 +82,6 @@ const UserBookedFlights = () => {
       headerName: "Destination",
       flex: 1,
       maxWidth: 200,
-
     },
     {
       field: "price",
@@ -104,33 +101,12 @@ const UserBookedFlights = () => {
       flex: 1,
       maxWidth: 200,
     },
-    {
-      field: "Button",
-      flex: 1,
-      maxWidth: 100,
-      renderCell: (params) => {
-        return (
-          <Box textAlign="center">
-            <Button
-            type="button"
-              // variant="text"
-              color="primary"
-              onClick={deleteIt}
-                // console.log("Delete flight")
-            >
-              <DownloadRoundedIcon />
-            </Button>
-          </Box>
-        );
-      },
-    },
-
   ];
 
   React.useEffect(() => {
     axios({
-      url: "http://localhost:8000/get_all_data",
-      method: "GET",
+      url: "http://localhost:8000/flight_booking",
+      method: "POST",
       withCredentials: true,
       crossDomain: true,
     }).then((res) => {
@@ -143,21 +119,21 @@ const UserBookedFlights = () => {
         //   res.data[i].tenderName === tenderName &&
         //   res.data[i].stud.length !== 0
         // ) {
-          var obj = {
-            id: cnt++,
-            flightno: res.data[i].flightno,
-            flightname: res.data[i].flightname,
-            source: res.data[i].from,
-            destination: res.data[i].to,
-            price: res.data[i].price,
-            seats: res.data[i].seats,
-            date: res.data[i].date,
-          };
-          // if (obj.withdraw === 0) obj.withdraw = "";
-          // if (obj.withdraw === 1) obj.withdraw = "YES.";
-          data.push(obj);
-          setRows(data);
-        }
+        var obj = {
+          id: cnt++,
+          flightno: res.data[i].flightno,
+          flightname: res.data[i].flightname,
+          source: res.data[i].from,
+          destination: res.data[i].to,
+          price: res.data[i].price,
+          seats: res.data[i].seats,
+          date: res.data[i].date,
+        };
+        // if (obj.withdraw === 0) obj.withdraw = "";
+        // if (obj.withdraw === 1) obj.withdraw = "YES.";
+        data.push(obj);
+        setRows(data);
+      }
       // }
       // console.log(rows);
     });
